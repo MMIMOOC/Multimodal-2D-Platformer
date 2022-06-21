@@ -1,4 +1,9 @@
 using UnityEngine;
+using UnityEngine.Windows.Speech;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
 
 public class PlayerAttack : MonoBehaviour
 {
@@ -6,10 +11,14 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private Transform firePoint;
     [SerializeField] private GameObject[] fireballs;
     [SerializeField] private AudioClip fireballSound;
+    [SerializeField] private string[] m_Keywords;
 
     private Animator anim;
     private PlayerMovement playerMovement;
     private float cooldownTimer = Mathf.Infinity;
+    private KeywordRecognizer m_Recognizer;
+    private Dictionary<string, Action> keywordActions = new Dictionary<string, Action>();
+
 
     private void Awake()
     {
@@ -43,4 +52,21 @@ public class PlayerAttack : MonoBehaviour
         }
         return 0;
     }
+
+
+    void Start()
+    {
+        keywordActions.Add("fire", Attack);
+        m_Recognizer = new KeywordRecognizer(keywordActions.Keys.ToArray());
+        m_Recognizer.OnPhraseRecognized += OnKeywordsRecognized;
+        m_Recognizer.Start();
+    }
+
+    private void OnKeywordsRecognized(PhraseRecognizedEventArgs args)
+    {
+        Debug.Log("keyword: " + args.text);
+        keywordActions[args.text].Invoke();
+    }
+
+
 }

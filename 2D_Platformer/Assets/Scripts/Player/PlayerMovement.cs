@@ -1,4 +1,9 @@
 ﻿using UnityEngine;
+using UnityEngine.Windows.Speech;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -30,6 +35,7 @@ public class PlayerMovement : MonoBehaviour
     private BoxCollider2D boxCollider;
     private float wallJumpCooldown;
     private float horizontalInput;
+
 
     private void Awake()
     {
