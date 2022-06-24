@@ -13,6 +13,7 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private AudioClip fireballSound;
     [SerializeField] private string[] m_Keywords;
 
+    private int availableBullets = 10;
     private Animator anim;
     private PlayerMovement playerMovement;
     private float cooldownTimer = Mathf.Infinity;
@@ -28,8 +29,15 @@ public class PlayerAttack : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.V) && cooldownTimer > attackCooldown && playerMovement.canAttack())
+        if(Input.GetKeyDown(KeyCode.R) && availableBullets < 10)
+        {
+            Reload();
+        }
+
+        if (Input.GetKeyDown(KeyCode.V) && cooldownTimer > attackCooldown 
+        && playerMovement.canAttack() && availableBullets > 0)
             Attack();
+            availableBullets -= 1;
 
         cooldownTimer += Time.deltaTime;
     }
@@ -42,6 +50,7 @@ public class PlayerAttack : MonoBehaviour
 
         fireballs[FindFireball()].transform.position = firePoint.position;
         fireballs[FindFireball()].GetComponent<Projectile>().SetDirection(Mathf.Sign(transform.localScale.x));
+        Debug.logger.Log("Fireballs left:" + availableBullets);
     }
     private int FindFireball()
     {
@@ -51,6 +60,11 @@ public class PlayerAttack : MonoBehaviour
                 return i;
         }
         return 0;
+    }
+
+    private void Reload()
+    {
+        availableBullets = 10;
     }
 
 
