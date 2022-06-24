@@ -69,7 +69,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (onWall())
         {
-            body.gravityScale = 0;
+            body.gravityScale = 15;
             body.velocity = Vector2.zero;
         }
         else
