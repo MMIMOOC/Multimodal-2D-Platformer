@@ -12,8 +12,8 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private GameObject[] fireballs;
     [SerializeField] private AudioClip fireballSound;
     [SerializeField] private string[] m_Keywords;
+    [SerializeField] private int availableBullets;
 
-    private int availableBullets = 10;
     private Animator anim;
     private PlayerMovement playerMovement;
     private float cooldownTimer = Mathf.Infinity;
@@ -36,8 +36,9 @@ public class PlayerAttack : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.V) && cooldownTimer > attackCooldown 
         && playerMovement.canAttack() && availableBullets > 0)
+        {
             Attack();
-            availableBullets -= 1;
+        }
 
         cooldownTimer += Time.deltaTime;
     }
@@ -50,6 +51,8 @@ public class PlayerAttack : MonoBehaviour
 
         fireballs[FindFireball()].transform.position = firePoint.position;
         fireballs[FindFireball()].GetComponent<Projectile>().SetDirection(Mathf.Sign(transform.localScale.x));
+
+        availableBullets -= 1;
         Debug.logger.Log("Fireballs left:" + availableBullets);
     }
     private int FindFireball()
@@ -65,6 +68,7 @@ public class PlayerAttack : MonoBehaviour
     private void Reload()
     {
         availableBullets = 10;
+        Debug.logger.Log("Reloading done. Available fireballs: " + availableBullets);
     }
 
 
