@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.Windows.Speech;
+using UnityEngine.UI;
+using System.Collections;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,18 +15,23 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private AudioClip fireballSound;
     [SerializeField] private string[] m_Keywords;
     [SerializeField] private int availableBullets;
+    [SerializeField] private Transform ammoText;
 
     private Animator anim;
     private PlayerMovement playerMovement;
     private float cooldownTimer = Mathf.Infinity;
     private KeywordRecognizer m_Recognizer;
     private Dictionary<string, Action> keywordActions = new Dictionary<string, Action>();
-
+ 
+    private void UpdateAmmoText() {
+        ammoText.GetComponent<Text>().text = "Bullets left: " + availableBullets.ToString() + " / 10";
+    }
 
     private void Awake()
     {
         anim = GetComponent<Animator>();
         playerMovement = GetComponent<PlayerMovement>();
+        ammoText.GetComponent<Text>().text = "Bullets left: 10 / 10";
     }
 
     private void Update()
@@ -32,12 +39,14 @@ public class PlayerAttack : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.R) && availableBullets < 10)
         {
             Reload();
+            UpdateAmmoText();
         }
 
         if (Input.GetKeyDown(KeyCode.V) && cooldownTimer > attackCooldown 
         && playerMovement.canAttack() && availableBullets > 0)
         {
             Attack();
+            UpdateAmmoText();
         }
 
         cooldownTimer += Time.deltaTime;
@@ -53,7 +62,6 @@ public class PlayerAttack : MonoBehaviour
         fireballs[FindFireball()].GetComponent<Projectile>().SetDirection(Mathf.Sign(transform.localScale.x));
 
         availableBullets -= 1;
-        Debug.logger.Log("Fireballs left:" + availableBullets);
     }
     private int FindFireball()
     {
@@ -68,7 +76,7 @@ public class PlayerAttack : MonoBehaviour
     private void Reload()
     {
         availableBullets = 10;
-        Debug.logger.Log("Reloading done. Available fireballs: " + availableBullets);
+        Debug.unityLogger.Log("Reloading done. Available fireballs: " + availableBullets);
     }
 
 
