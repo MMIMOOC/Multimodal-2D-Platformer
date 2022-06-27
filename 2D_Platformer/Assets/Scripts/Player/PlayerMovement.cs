@@ -1,4 +1,9 @@
 ﻿using UnityEngine;
+using UnityEngine.Windows.Speech;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -30,6 +35,7 @@ public class PlayerMovement : MonoBehaviour
     private BoxCollider2D boxCollider;
     private float wallJumpCooldown;
     private float horizontalInput;
+
 
     private void Awake()
     {
@@ -63,7 +69,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (onWall())
         {
-            body.gravityScale = 0;
+            body.gravityScale = 15;
             body.velocity = Vector2.zero;
         }
         else
@@ -133,6 +139,6 @@ public class PlayerMovement : MonoBehaviour
     }
     public bool canAttack()
     {
-        return horizontalInput == 0 && isGrounded() && !onWall();
+        return !onWall();
     }
 }
