@@ -56,7 +56,7 @@ public class PlayerAttack : MonoBehaviour
 
     void Start()
     {
-        keywordActions.Add("fire", Attack);
+        keywordActions.Add("shoot", Attack);
         m_Recognizer = new KeywordRecognizer(keywordActions.Keys.ToArray());
         m_Recognizer.OnPhraseRecognized += OnKeywordsRecognized;
         m_Recognizer.Start();
