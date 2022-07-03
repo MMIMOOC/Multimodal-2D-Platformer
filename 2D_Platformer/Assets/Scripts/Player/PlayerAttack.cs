@@ -24,12 +24,11 @@ public class PlayerAttack : MonoBehaviour
     private Dictionary<string, Action> keywordActions = new Dictionary<string, Action>();
  
     private void UpdateAmmoText() {
-        ammoText.GetComponent<Text>().text = "Bullets left: " + availableBullets.ToString() + " / 10";
-        
         if(availableBullets == 0) {
             ammoText.GetComponent<Text>().color = Color.red;
+            ammoText.GetComponent<Text>().text = "Reloading needed. \r\nAvailable fireballs: " + availableBullets.ToString() + " / 10";
         } else {
-            ammoText.GetComponent<Text>().color = Color.blue;
+            ammoText.GetComponent<Text>().text = "Bullets left: " + availableBullets.ToString() + " / 10";
         }
     }
 
@@ -45,7 +44,6 @@ public class PlayerAttack : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.R) && availableBullets < 10)
         {
             Reload();
-            UpdateAmmoText();
         }
 
         if (Input.GetKeyDown(KeyCode.V) && cooldownTimer > attackCooldown 
@@ -82,7 +80,8 @@ public class PlayerAttack : MonoBehaviour
     private void Reload()
     {
         availableBullets = 10;
-        Debug.unityLogger.Log("Reloading done. Available fireballs: " + availableBullets);
+        ammoText.GetComponent<Text>().color = Color.blue;
+        ammoText.GetComponent<Text>().text = "Reloading done. \r\nAvailable fireballs: " + availableBullets.ToString() + " / 10";
     }
 
 
