@@ -25,6 +25,12 @@ public class PlayerAttack : MonoBehaviour
  
     private void UpdateAmmoText() {
         ammoText.GetComponent<Text>().text = "Bullets left: " + availableBullets.ToString() + " / 10";
+        
+        if(availableBullets == 0) {
+            ammoText.GetComponent<Text>().color = Color.red;
+        } else {
+            ammoText.GetComponent<Text>().color = Color.blue;
+        }
     }
 
     private void Awake()
