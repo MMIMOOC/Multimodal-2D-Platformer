@@ -92,6 +92,7 @@ public class PlayerAttack : MonoBehaviour
     {
         Debug.Log("keyword: " + args.text);
         keywordActions[args.text].Invoke();
+        UpdateAmmoText();
     }
 
 
