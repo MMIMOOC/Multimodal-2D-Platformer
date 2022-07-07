@@ -96,8 +96,11 @@ public class PlayerAttack : MonoBehaviour
     private void OnKeywordsRecognized(PhraseRecognizedEventArgs args)
     {
         Debug.Log("keyword: " + args.text);
-        keywordActions[args.text].Invoke();
-        UpdateAmmoText();
+        
+        if(availableBullets > 0){
+            keywordActions[args.text].Invoke();
+            UpdateAmmoText();
+        }
     }
 
 
