@@ -16,18 +16,25 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private string[] m_Keywords;
     [SerializeField] private int availableBullets;
     [SerializeField] private Transform ammoText;
+    [SerializeField] private int timeleft;
 
     private Animator anim;
     private PlayerMovement playerMovement;
     private float cooldownTimer = Mathf.Infinity;
     private KeywordRecognizer m_Recognizer;
     private Dictionary<string, Action> keywordActions = new Dictionary<string, Action>();
- 
-    private void UpdateAmmoText() {
-        if(availableBullets == 0) {
+
+    private bool loading
+
+    private void UpdateAmmoText()
+    {
+        if (availableBullets == 0)
+        {
             ammoText.GetComponent<Text>().color = Color.red;
             ammoText.GetComponent<Text>().text = "Reloading needed. \r\nAvailable fireballs: " + availableBullets.ToString() + " / 10";
-        } else {
+        }
+        else
+        {
             ammoText.GetComponent<Text>().text = "Bullets left: " + availableBullets.ToString() + " / 10";
         }
     }
@@ -41,31 +48,49 @@ public class PlayerAttack : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.R) && availableBullets < 10)
+        if (Input.GetKeyDown(KeyCode.R) && availableBullets < 10)
         {
+            loading = true;
+            if (loading)
+            {
+                if (timeleft > 0)
+                {
+                    timeleft -= 1;
+                }
+                else
+                {
+                    Debug.Log("Time is UP!");
+                    timeleft = 0;
+                    loading = false;
+
+                }
+            }
+
             Reload();
         }
 
-        if (Input.GetKeyDown(KeyCode.V) && cooldownTimer > attackCooldown 
+        if (Input.GetKeyDown(KeyCode.V) && cooldownTimer > attackCooldown
         && playerMovement.canAttack() && availableBullets > 0)
         {
             Attack();
             UpdateAmmoText();
         }
 
+
+
         cooldownTimer += Time.deltaTime;
     }
 
     private void Attack()
     {
-        SoundManager.instance.PlaySound(fireballSound);
-        anim.SetTrigger("attack");
-        cooldownTimer = 0;
+            SoundManager.instance.PlaySound(fireballSound);
+            anim.SetTrigger("attack");
+            cooldownTimer = 0;
 
-        fireballs[FindFireball()].transform.position = firePoint.position;
-        fireballs[FindFireball()].GetComponent<Projectile>().SetDirection(Mathf.Sign(transform.localScale.x));
+            fireballs[FindFireball()].transform.position = firePoint.position;
+            fireballs[FindFireball()].GetComponent<Projectile>().SetDirection(Mathf.Sign(transform.localScale.x));
 
-        availableBullets -= 1;
+            availableBullets -= 1;
     }
     private int FindFireball()
     {
@@ -79,6 +104,11 @@ public class PlayerAttack : MonoBehaviour
 
     private void Reload()
     {
+        if(timeleft > 0)
+        {
+            timeleft -= 1
+        }
+
         availableBullets = 10;
         ammoText.GetComponent<Text>().color = Color.blue;
         ammoText.GetComponent<Text>().text = "Reloading done. \r\nAvailable fireballs: " + availableBullets.ToString() + " / 10";
@@ -91,13 +121,18 @@ public class PlayerAttack : MonoBehaviour
         m_Recognizer = new KeywordRecognizer(keywordActions.Keys.ToArray());
         m_Recognizer.OnPhraseRecognized += OnKeywordsRecognized;
         m_Recognizer.Start();
+
     }
 
     private void OnKeywordsRecognized(PhraseRecognizedEventArgs args)
     {
-        Debug.Log("keyword: " + args.text);
-        keywordActions[args.text].Invoke();
-        UpdateAmmoText();
+        if (loading == false)
+        {
+            Debug.Log("keyword: " + args.text);
+            keywordActions[args.text].Invoke();
+            UpdateAmmoText();
+        }
+
     }
 
 
