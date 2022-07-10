@@ -95,11 +95,11 @@ public class PlayerAttack : MonoBehaviour
 
     IEnumerator Reload()
     {
-        timeleft = 5f;
+        timeleft = 3f;
 
         while(timeleft > 0)
         {
-            Debug.Log("Reloading...");
+            //Debug.Log("Reloading...");
             loading = true;
             timeleft -= 1f;
             ammoText.GetComponent<Text>().color = Color.red;
@@ -110,7 +110,7 @@ public class PlayerAttack : MonoBehaviour
         availableBullets = 10;
         ammoText.GetComponent<Text>().color = Color.blue;
         ammoText.GetComponent<Text>().text = "Reloading done. \r\nAvailable fireballs: " + availableBullets.ToString() + " / 10";
-        Debug.Log("You can shoot again ");
+        //Debug.Log("You can shoot again ");
         loading = false;
     }
 
