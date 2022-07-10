@@ -16,7 +16,7 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private string[] m_Keywords;
     [SerializeField] private int availableBullets;
     [SerializeField] private Transform ammoText;
-    [SerializeField] private int timeleft;
+   
 
     private Animator anim;
     private PlayerMovement playerMovement;
@@ -24,7 +24,10 @@ public class PlayerAttack : MonoBehaviour
     private KeywordRecognizer m_Recognizer;
     private Dictionary<string, Action> keywordActions = new Dictionary<string, Action>();
 
-    private bool loading
+    private bool loading = false;
+    private float timeleft;
+
+
 
     private void UpdateAmmoText()
     {
@@ -48,25 +51,14 @@ public class PlayerAttack : MonoBehaviour
 
     private void Update()
     {
+        if (loading)
+        {
+            return;
+        }
+
         if (Input.GetKeyDown(KeyCode.R) && availableBullets < 10)
         {
-            loading = true;
-            if (loading)
-            {
-                if (timeleft > 0)
-                {
-                    timeleft -= 1;
-                }
-                else
-                {
-                    Debug.Log("Time is UP!");
-                    timeleft = 0;
-                    loading = false;
-
-                }
-            }
-
-            Reload();
+            StartCoroutine(Reload());            
         }
 
         if (Input.GetKeyDown(KeyCode.V) && cooldownTimer > attackCooldown
@@ -100,18 +92,28 @@ public class PlayerAttack : MonoBehaviour
                 return i;
         }
         return 0;
+
     }
 
-    private void Reload()
+    IEnumerator Reload()
     {
-        if(timeleft > 0)
+        timeleft = 5f;
+
+        while(timeleft > 0)
         {
-            timeleft -= 1
+            Debug.Log("Reloading...");
+            loading = true;
+            timeleft -= 1f;
+            ammoText.GetComponent<Text>().color = Color.red;
+            ammoText.GetComponent<Text>().text = "Reloading. \r\nCountdown: " + timeleft.ToString() ;
+            yield return new WaitForSeconds(1f);
         }
 
         availableBullets = 10;
         ammoText.GetComponent<Text>().color = Color.blue;
         ammoText.GetComponent<Text>().text = "Reloading done. \r\nAvailable fireballs: " + availableBullets.ToString() + " / 10";
+        Debug.Log("You can shoot again ");
+        loading = false;
     }
 
 
@@ -131,6 +133,10 @@ public class PlayerAttack : MonoBehaviour
             Debug.Log("keyword: " + args.text);
             keywordActions[args.text].Invoke();
             UpdateAmmoText();
+        }
+        else
+        {
+            Debug.Log("Still reloading");
         }
 
     }
