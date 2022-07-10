@@ -17,7 +17,6 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private int availableBullets;
     [SerializeField] private Transform ammoText;
    
-
     private Animator anim;
     private PlayerMovement playerMovement;
     private float cooldownTimer = Mathf.Infinity;
@@ -65,8 +64,6 @@ public class PlayerAttack : MonoBehaviour
             Attack();
             UpdateAmmoText();
         }
-
-
 
         cooldownTimer += Time.deltaTime;
     }
