@@ -5,6 +5,7 @@ public class Door : MonoBehaviour
     [SerializeField] private Transform previousRoom;
     [SerializeField] private Transform nextRoom;
     [SerializeField] private CameraController cam;
+    [SerializeField] private LoadingManager loadingManager;
 
     private void Awake()
     {
@@ -15,6 +16,12 @@ public class Door : MonoBehaviour
     {
         if (collision.tag == "Player")
         {
+            //checks if the player has reached the last door and stops the game
+            if(previousRoom.GetComponent<Room>().name == "Room3")
+            {
+                loadingManager.GameWon();
+            }
+
             if (collision.transform.position.x < transform.position.x)
             {
                 cam.MoveToNewRoom(nextRoom);

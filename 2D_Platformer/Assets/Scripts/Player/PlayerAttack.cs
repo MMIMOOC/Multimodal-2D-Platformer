@@ -16,6 +16,7 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private string[] m_Keywords;
     [SerializeField] private int availableBullets;
     [SerializeField] private Transform ammoText;
+    [SerializeField] private GameWonScript finalScreen;
 
     private Animator anim;
     private PlayerMovement playerMovement;
@@ -41,19 +42,21 @@ public class PlayerAttack : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.R) && availableBullets < 10)
-        {
-            Reload();
-        }
+        if(!finalScreen.isGameWon){
+            if(Input.GetKeyDown(KeyCode.R) && availableBullets < 10)
+            {
+                Reload();
+            }
 
-        if (Input.GetKeyDown(KeyCode.V) && cooldownTimer > attackCooldown 
-        && playerMovement.canAttack() && availableBullets > 0)
-        {
-            Attack();
-            UpdateAmmoText();
-        }
+            if (Input.GetKeyDown(KeyCode.V) && cooldownTimer > attackCooldown 
+            && playerMovement.canAttack() && availableBullets > 0)
+            {
+                Attack();
+                UpdateAmmoText();
+            }
 
-        cooldownTimer += Time.deltaTime;
+            cooldownTimer += Time.deltaTime;
+        }
     }
 
     private void Attack()
@@ -102,6 +105,4 @@ public class PlayerAttack : MonoBehaviour
             UpdateAmmoText();
         }
     }
-
-
 }
