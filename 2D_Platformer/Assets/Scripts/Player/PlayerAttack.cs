@@ -16,7 +16,6 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private string[] m_Keywords;
     [SerializeField] private int availableBullets;
     [SerializeField] private Transform ammoText;
-   
     [SerializeField] private GameWonScript finalScreen;
 
     private Animator anim;
@@ -24,7 +23,6 @@ public class PlayerAttack : MonoBehaviour
     private float cooldownTimer = Mathf.Infinity;
     private KeywordRecognizer m_Recognizer;
     private Dictionary<string, Action> keywordActions = new Dictionary<string, Action>();
-
     private bool loading = false;
     private float timeleft;
 
@@ -66,8 +64,8 @@ public class PlayerAttack : MonoBehaviour
             {
                 Attack();
                 UpdateAmmoText();
+                Debug.Log("Pressed key V");
             }
-
             cooldownTimer += Time.deltaTime;
         }
     }
@@ -83,6 +81,7 @@ public class PlayerAttack : MonoBehaviour
 
             availableBullets -= 1;
     }
+
     private int FindFireball()
     {
         for (int i = 0; i < fireballs.Length; i++)
@@ -91,7 +90,6 @@ public class PlayerAttack : MonoBehaviour
                 return i;
         }
         return 0;
-
     }
 
     IEnumerator Reload()
@@ -111,7 +109,7 @@ public class PlayerAttack : MonoBehaviour
         availableBullets = 10;
         ammoText.GetComponent<Text>().color = Color.blue;
         ammoText.GetComponent<Text>().text = "Reloading done. \r\nAvailable fireballs: " + availableBullets.ToString() + " / 10";
-        //Debug.Log("You can shoot again ");
+        //Debug.Log("You can shoot again");
         loading = false;
     }
 
@@ -122,12 +120,11 @@ public class PlayerAttack : MonoBehaviour
         m_Recognizer = new KeywordRecognizer(keywordActions.Keys.ToArray());
         m_Recognizer.OnPhraseRecognized += OnKeywordsRecognized;
         m_Recognizer.Start();
-
     }
 
     private void OnKeywordsRecognized(PhraseRecognizedEventArgs args)
     {
-        if (loading == false && !finalScreen.isGameWon)
+        if (loading == false && !finalScreen.isGameWon && availableBullets > 0)
         {
             Debug.Log("keyword: " + args.text);
             keywordActions[args.text].Invoke();
@@ -135,8 +132,7 @@ public class PlayerAttack : MonoBehaviour
         }
         else
         {
-            Debug.Log("Still reloading or you won the game");
+            Debug.Log("Voice recognition: currently reloading, the game is finished or you have no bullets in the chamber");
         }
-
     }
 }
