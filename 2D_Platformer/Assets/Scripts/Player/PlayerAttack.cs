@@ -24,7 +24,7 @@ public class PlayerAttack : MonoBehaviour
     private KeywordRecognizer m_Recognizer;
     private Dictionary<string, Action> keywordActions = new Dictionary<string, Action>();
 
-    private bool loading
+    private bool loading;
 
     private void UpdateAmmoText()
     {
@@ -106,7 +106,7 @@ public class PlayerAttack : MonoBehaviour
     {
         if(timeleft > 0)
         {
-            timeleft -= 1
+            timeleft -= 1;
         }
 
         availableBullets = 10;
@@ -134,6 +134,4 @@ public class PlayerAttack : MonoBehaviour
         }
 
     }
-
-
 }
