@@ -27,8 +27,6 @@ public class PlayerAttack : MonoBehaviour
     private bool loading = false;
     private float timeleft;
 
-
-
     private void UpdateAmmoText()
     {
         if (availableBullets == 0)
@@ -140,6 +138,4 @@ public class PlayerAttack : MonoBehaviour
         }
 
     }
-
-
 }
