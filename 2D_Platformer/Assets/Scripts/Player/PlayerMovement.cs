@@ -30,6 +30,8 @@ public class PlayerMovement : MonoBehaviour
     [Header("Sounds")]
     [SerializeField] private AudioClip jumpSound;
 
+    [SerializeField] private GameWonScript finalScreen;
+    
     private Rigidbody2D body;
     private Animator anim;
     private BoxCollider2D boxCollider;
@@ -47,43 +49,45 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        horizontalInput = Input.GetAxis("Horizontal");
+        if(!finalScreen.isGameWon){
+            horizontalInput = Input.GetAxis("Horizontal");
 
-        //Flip player when moving left-right
-        if (horizontalInput > 0.01f)
-            transform.localScale = Vector3.one;
-        else if (horizontalInput < -0.01f)
-            transform.localScale = new Vector3(-1, 1, 1);
+            //Flip player when moving left-right
+            if (horizontalInput > 0.01f)
+                transform.localScale = Vector3.one;
+            else if (horizontalInput < -0.01f)
+                transform.localScale = new Vector3(-1, 1, 1);
 
-        //Set animator parameters
-        anim.SetBool("run", horizontalInput != 0);
-        anim.SetBool("grounded", isGrounded());
+            //Set animator parameters
+            anim.SetBool("run", horizontalInput != 0);
+            anim.SetBool("grounded", isGrounded());
 
-        //Jump
-        if (Input.GetKeyDown(KeyCode.Space))
-            Jump();
+            //Jump
+            if (Input.GetKeyDown(KeyCode.Space))
+                Jump();
 
-        //Adjustable jump height
-        if (Input.GetKeyUp(KeyCode.Space) && body.velocity.y > 0)
-            body.velocity = new Vector2(body.velocity.x, body.velocity.y / 2);
+            //Adjustable jump height
+            if (Input.GetKeyUp(KeyCode.Space) && body.velocity.y > 0)
+                body.velocity = new Vector2(body.velocity.x, body.velocity.y / 2);
 
-        if (onWall())
-        {
-            body.gravityScale = 15;
-            body.velocity = Vector2.zero;
-        }
-        else
-        {
-            body.gravityScale = 7;
-            body.velocity = new Vector2(horizontalInput * speed, body.velocity.y);
-
-            if (isGrounded())
+            if (onWall())
             {
-                coyoteCounter = coyoteTime; //Reset coyote counter when on the ground
-                jumpCounter = extraJumps; //Reset jump counter to extra jump value
+                body.gravityScale = 15;
+                body.velocity = Vector2.zero;
             }
             else
-                coyoteCounter -= Time.deltaTime; //Start decreasing coyote counter when not on the ground
+            {
+                body.gravityScale = 7;
+                body.velocity = new Vector2(horizontalInput * speed, body.velocity.y);
+
+                if (isGrounded())
+                {
+                    coyoteCounter = coyoteTime; //Reset coyote counter when on the ground
+                    jumpCounter = extraJumps; //Reset jump counter to extra jump value
+                }
+                else
+                    coyoteCounter -= Time.deltaTime; //Start decreasing coyote counter when not on the ground
+            }
         }
     }
 
