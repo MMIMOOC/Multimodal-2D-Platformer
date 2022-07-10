@@ -50,21 +50,25 @@ public class PlayerAttack : MonoBehaviour
 
     private void Update()
     {
-        if (loading)
-        {
-            return;
-        }
+        if(!finalScreen.isGameWon){
+            if (loading)
+            {
+                return;
+            }
 
-        if (Input.GetKeyDown(KeyCode.R) && availableBullets < 10)
-        {
-            StartCoroutine(Reload());            
-        }
+            if (Input.GetKeyDown(KeyCode.R) && availableBullets < 10)
+            {
+                StartCoroutine(Reload());            
+            }
 
-        if (Input.GetKeyDown(KeyCode.V) && cooldownTimer > attackCooldown
-        && playerMovement.canAttack() && availableBullets > 0)
-        {
-            Attack();
-            UpdateAmmoText();
+            if (Input.GetKeyDown(KeyCode.V) && cooldownTimer > attackCooldown
+            && playerMovement.canAttack() && availableBullets > 0)
+            {
+                Attack();
+                UpdateAmmoText();
+            }
+
+            cooldownTimer += Time.deltaTime;
         }
     }
 
@@ -123,7 +127,7 @@ public class PlayerAttack : MonoBehaviour
 
     private void OnKeywordsRecognized(PhraseRecognizedEventArgs args)
     {
-        if (loading == false)
+        if (loading == false && !finalScreen.isGameWon)
         {
             Debug.Log("keyword: " + args.text);
             keywordActions[args.text].Invoke();
@@ -131,7 +135,7 @@ public class PlayerAttack : MonoBehaviour
         }
         else
         {
-            Debug.Log("Still reloading");
+            Debug.Log("Still reloading or you won the game");
         }
 
     }
