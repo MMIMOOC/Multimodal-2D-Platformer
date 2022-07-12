@@ -2,8 +2,9 @@
 
 A 2D platformer game that uses 2 different modalities - text recognition (keyboard) for moving around and voice recognition (microphone) for shooting.
 
-
 <img src="https://user-images.githubusercontent.com/79105432/178453326-48144301-cd5d-442d-8719-19d3851a011e.png" width=70% height=70%>
+
+# Demo available [here](https://youtu.be/F2_7ZmsAYLY)
 
 # Documentation
 Read the game description: [GameDescription.md](https://github.com/MMIMOOC/Multimodal-2D-Platformer/blob/main/GameDescription.md).
