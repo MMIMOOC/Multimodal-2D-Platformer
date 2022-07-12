@@ -21,5 +21,4 @@ Shooting and reloading at the same time is an example for modality fission. The 
 
 **An example for what the 2D shooter can look like**
 
-![image](https://user-images.githubusercontent.com/79105432/174489685-917e0fc8-22bb-4c25-92c8-c8ae443e14fe.png)
-Picture source: https://github.com/JumpThanawut/VoiceControlFor2DPlatformer
+![image](https://user-images.githubusercontent.com/79105432/178458444-80c0a581-698e-4747-b345-5b6097e6df61.png)
